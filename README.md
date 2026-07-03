@@ -23,5 +23,4 @@ npm run dev
 ```
 
 ## Author
-
-Ankita
+Ishita Singh
