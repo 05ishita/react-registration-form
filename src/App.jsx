@@ -1,143 +1,251 @@
 import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    email: "",
+    password: "",
     isStudent: false,
     gender: "",
-     city: "",
-  about: "",
-   course: "",
+    city: "",
+    course: "",
+    about: "",
   });
 
   function handleChange(event) {
-    const { name, value , type, checked } = event.target;
+    const { name, value, type, checked } = event.target;
 
-    setFormData({
-      ...formData,
-      [name]:  type === "checkbox" ? checked :value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   }
-  function handleSubmit(event) {
-  event.preventDefault();
 
-  console.log(formData);
-}
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.gender ||
+      !formData.city ||
+      !formData.course
+    ) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    console.log(formData);
+
+    setSubmitted(true);
+  }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className="container">
 
-      <h1>Registration Form</h1>
+      <form className="form-card" onSubmit={handleSubmit}>
 
-      <input
-        type="text"
-        name="firstName"
-        placeholder="First Name"
-        value={formData.firstName}
-        onChange={handleChange}
-      />
+        <h1>Registration Form</h1>
 
-      <br /><br />
+        <p className="subtitle">
+          Create your account by filling in the details below.
+        </p>
 
-      <input
-        type="text"
-        name="lastName"
-        placeholder="Last Name"
-        value={formData.lastName}
-        onChange={handleChange}
-      />
-       
-       <input
-  type="checkbox"
-  name="isStudent"
-  checked={formData.isStudent}
-  onChange={handleChange}
-/>
+        {submitted && (
+          <div className="success-message">
+            🎉 Registration Successful!
+          </div>
+        )}
 
-<label> Are you a Student?</label>
+        <div className="input-group">
+          <label>First Name</label>
 
-<br /><br />
+          <input
+            type="text"
+            name="firstName"
+            placeholder="Enter first name"
+            value={formData.firstName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="input-group">
+          <label>Last Name</label>
+
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Enter last name"
+            value={formData.lastName}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="input-group">
+          <label>Email</label>
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="input-group">
+          <label>Password</label>
+
+          <div className="password-box">
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+
+            <button
+              type="button"
+              className="show-btn"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+
+          </div>
+        </div>
+
+        <div className="checkbox">
+
+          <input
+            type="checkbox"
+            name="isStudent"
+            checked={formData.isStudent}
+            onChange={handleChange}
+          />
+
+          <label>Are you a Student?</label>
+
+        </div>
+
+        <div className="radio-group">
+
           <h3>Gender</h3>
 
-<input
-  type="radio"
-  name="gender"
-  value="Male"
-  checked={formData.gender === "Male"}
-  onChange={handleChange}
- />
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="Male"
+              checked={formData.gender === "Male"}
+              onChange={handleChange}
+            />
+            Male
+          </label>
 
-<label>Male</label>
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              value="Female"
+              checked={formData.gender === "Female"}
+              onChange={handleChange}
+            />
+            Female
+          </label>
 
-<br />
+        </div>
 
-<input
-  type="radio"
-  name="gender"
-  value="Female"
-  checked={formData.gender === "Female"}
-  onChange={handleChange}
-/>
+        <div className="input-group">
 
-<label>Female</label>
+          <label>City</label>
 
-<br /><br />
-     <h3>Select City</h3>
+          <select
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+          >
+            <option value="">Select City</option>
+            <option>Delhi</option>
+            <option>Mumbai</option>
+            <option>Lucknow</option>
+            <option>Bangalore</option>
+          </select>
 
-<select
-  name="city"
-  value={formData.city}
-  onChange={handleChange}
->
-  <option value="">Select City</option>
-  <option value="Delhi">Delhi</option>
-  <option value="Mumbai">Mumbai</option>
-  <option value="Lucknow">Lucknow</option>
-</select>
- <h3>course</h3>
+        </div>
 
-<select
-  name="course"
-  value={formData.city}
-  onChange={handleChange}
->
-  <option value="">Select Course</option>
-  <option value="BTECH">BTECH</option>
-  <option value="MBA">MBA</option>
-  <option value="BCOM">BCOM</option>
-</select>
-<h3>About Yourself</h3>
+        <div className="input-group">
 
-<textarea
-  name="about"
-  placeholder="Write something..."
-  value={formData.about}
-  onChange={handleChange}
-/>
+          <label>Course</label>
 
-<br /><br />
+          <select
+            name="course"
+            value={formData.course}
+            onChange={handleChange}
+          >
+            <option value="">Select Course</option>
+            <option>B.Tech</option>
+            <option>MBA</option>
+            <option>BCA</option>
+            <option>B.Com</option>
+          </select>
 
-<br /><br />
-      <h2>
-        Welcome {formData.firstName} {formData.lastName}
-      </h2>
-      <p>
-Student : {formData.isStudent ? "Yes" : "No"}
-</p>
-      <p>
-Gender : {formData.gender}
-</p>
-<p>City : {formData.city}</p>
+        </div>
 
-<p>About : {formData.about}</p> 
-<p>Course : {formData.course}</p> 
-    </form>
-    
+        <div className="input-group">
+
+          <label>About Yourself</label>
+
+          <textarea
+            rows="4"
+            name="about"
+            placeholder="Tell us something about yourself..."
+            value={formData.about}
+            onChange={handleChange}
+          />
+
+        </div>
+
+        <button className="submit-btn">
+          Register
+        </button>
+
+      </form>
+
+      <div className="preview-card">
+
+        <h2>Live Preview</h2>
+
+        <p><strong>Name:</strong> {formData.firstName} {formData.lastName}</p>
+
+        <p><strong>Email:</strong> {formData.email || "-"}</p>
+
+        <p><strong>Student:</strong> {formData.isStudent ? "Yes" : "No"}</p>
+
+        <p><strong>Gender:</strong> {formData.gender || "-"}</p>
+
+        <p><strong>City:</strong> {formData.city || "-"}</p>
+
+        <p><strong>Course:</strong> {formData.course || "-"}</p>
+
+        <p><strong>About:</strong></p>
+
+        <p>{formData.about || "Nothing added yet."}</p>
+
+      </div>
+
+    </div>
   );
 }
-<button type="submit">
-  Submit
-</button>
+
 export default App;
